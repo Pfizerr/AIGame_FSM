@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 namespace AIGame
@@ -8,12 +9,36 @@ namespace AIGame
         private ShipState defaultState;
         private ShipState currentState;
 
+        public ShipState DefaultState
+        {
+            get
+            {
+                return defaultState;
+            }
+            private set
+            {
+                defaultState = value;
+            }
+        }
+
+        public ShipState CurrentState
+        {
+            get
+            {
+                return currentState;
+            }
+            private set
+            {
+                currentState = value;
+            }
+        }
+
         public ShipStateMachine(ShipStateType type, AIShip parent) : base(type, parent)
         {
             states = new List<ShipState>();
         }
 
-        public void UpdateMachine()
+        public void UpdateMachine(GameTime gameTime)
         {
             if (states.Count == 0)
                 return;
@@ -24,9 +49,15 @@ namespace AIGame
             if (defaultState == null)
                 return;
 
+            ShipStateType prevState = currentState.Type;
+            ShipStateType nextState = currentState.CheckTransitions();
 
+            if (nextState != prevState)
+            {
+                TransitionState(nextState);
+            }
 
-            currentState.Update();
+            currentState.Update(gameTime);
         }
 
         public void AddState(ShipState state)
@@ -52,7 +83,9 @@ namespace AIGame
             {
                 if (state.Type == type)
                 {
+                    currentState.Exit();
                     currentState = state;
+                    currentState.Enter();
                 }
             }
         }

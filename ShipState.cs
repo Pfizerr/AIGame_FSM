@@ -1,3 +1,5 @@
+using Microsoft.Xna.Framework;
+
 namespace AIGame
 {
 	public abstract class ShipState
@@ -17,7 +19,7 @@ namespace AIGame
             Type = type;
         }
 
-        public virtual void Update()
+        public virtual void Update(GameTime gameTime)
         {
 
         }

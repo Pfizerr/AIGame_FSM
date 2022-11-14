@@ -5,49 +5,93 @@ namespace AIGame
 {
 	public class Ship : Entity
     {
-
         protected Texture2D texture;
         protected Rectangle boundingBox;
-        protected Vector2 position;
         protected Point size;
-        protected float speed;
-        
-        public virtual float Health
-        {
-            get;
-            protected set;
-        }
 
-        public virtual Vector2 Position
+        protected float health;
+        protected float maxHealth;
+        protected float speed;
+        protected Vector2 velocity;
+
+        //protected ShipStateMachine stateMachine;
+
+
+        public virtual float Health
         {
             get
             {
-                return position;
+                return health;
             }
-            protected set
+            set
             {
-                position = value;
+                health = value;
+            }
+        }
+        
+        public virtual float MaxHealth
+        {
+            get
+            {
+                return maxHealth;
+            }
+            set
+            {
+                maxHealth = value;
             }
         }
 
-        public Ship(Vector2 position, Point size, Texture2D texture, float speed) : base()
+        public virtual Vector2 Velocity
         {
-            this.position = position;
+            get
+            {
+                return velocity;
+            }
+            set
+            {
+                velocity = value;
+            }
+        }
+
+        public virtual float Speed
+        {
+            get
+            {
+                return speed;
+            }
+            set
+            {
+                speed = value;
+            }
+        }
+
+
+        public Ship(Vector2 position, Point size, Texture2D texture, float speed) : base(position)
+        {
             this.size = size;
             this.texture = texture;
-
+            this.speed = speed;
+            this.position = position;
+            isActive = false;
+            velocity = Vector2.Zero;
             boundingBox = new Rectangle(position.ToPoint(), size); 
         }
 
         public override void Update(GameTime gameTime)
         {
-            boundingBox.Location = position.ToPoint() - new Point(size.X / 2, size.Y / 2);
+            if (isActive)
+            {
+                Position += Velocity * (float)(gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
+            }
+
+            boundingBox.Location = Position.ToPoint() - new Point(size.X / 2, size.Y / 2);
             base.Update(gameTime);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, null, Color.White, 0f, new Vector2(-size.X / 2, -size.Y / 2), 1f, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, boundingBox, null, Color.Orange, 0f, boundingBox.Size.ToVector2() * 0.5f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, Position, null, Color.White, 0f, size.ToVector2() * 0.5f, 1f, SpriteEffects.None, 0f);
         }
     }
 }

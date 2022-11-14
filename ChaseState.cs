@@ -1,20 +1,30 @@
+using Microsoft.Xna.Framework;
+using System.Diagnostics;
+using System;
+
 namespace AIGame
 {
 	public class ChaseState : ShipState
     {
-        public ChaseState(AIShip parent) : base(ShipStateType.STATE_CHASE, parent)
+        private Entity target;
+
+        public ChaseState(AIShip parent, Entity target) : base(ShipStateType.STATE_CHASE, parent)
         {
+            this.target = target;
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime)
         {
+            Vector2 dpos = Vector2.Normalize(target.Position - parent.Position);
+            parent.Velocity = dpos * parent.Speed;
 
-            base.Update();
+            base.Update(gameTime);
         }
 
         public override ShipStateType CheckTransitions()
         {
-            if (parent.DistanceToTarget > parent.DetectionRadius)
+
+            if (parent.DistanceToTarget > parent.MinDetectionDistance)
             {
                 return ShipStateType.STATE_ROAM; // B - A, (Chase -> Roam)
             }
@@ -24,7 +34,7 @@ namespace AIGame
                 {
                     return ShipStateType.STATE_FLEE; // B - C, (Chase -> Flee)
                 }
-                if (parent.DistanceToTarget < parent.EngagementRadius)
+                if (parent.DistanceToTarget < parent.MinEngagementDistance)
                 {
                     return ShipStateType.STATE_ENGAGE; // B - D, (Chase -> Engage)
                 }

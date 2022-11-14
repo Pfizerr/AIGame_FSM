@@ -1,22 +1,41 @@
+using Microsoft.Xna.Framework;
+using System;
+
 namespace AIGame
 {
 	public class RoamState : ShipState
     {
-        public RoamState(AIShip parent) : base(ShipStateType.STATE_ROAM, parent)
+        private Entity target;
+
+
+        public RoamState(AIShip parent, Entity target) : base(ShipStateType.STATE_ROAM, parent)
         {
+            this.target = target;
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime)
         {
 
-            
+            // IDLE ..
 
-            base.Update();
+            float dt = (float)(gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0f);
+
+
+            if (parent.Velocity.Length() < parent.Speed * 0.1f)
+            {
+                parent.Velocity = Vector2.Zero;
+            }
+            else
+            {
+                parent.Velocity -= parent.Velocity * 0.5f * dt;
+            }
+
+            base.Update(gameTime);
         }
 
         public override ShipStateType CheckTransitions()
         {
-            if (parent.DistanceToTarget < parent.DetectionRadius)
+            if (parent.DistanceToTarget < parent.MinDetectionDistance)
             {
                 if (parent.Health < parent.MinEngagementHealth)
                 {

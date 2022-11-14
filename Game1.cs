@@ -10,13 +10,14 @@ namespace AIGame
 
         private Ship[] ships;
         private Point clientBounds;
-
+        private Cursor cursor;
+        public static SpriteFont font;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
         }
 
         protected override void Initialize()
@@ -30,15 +31,18 @@ namespace AIGame
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            clientBounds = new Point(1920, 1080);
+            font = Content.Load<SpriteFont>("trebuchetms");
+
+            clientBounds = new Point(1000, 700);
             graphics.PreferredBackBufferWidth = clientBounds.X;
             graphics.PreferredBackBufferHeight = clientBounds.Y;
             graphics.ApplyChanges();
 
+            cursor = new Cursor(new Point(8, 8), CreateFilledRectangle(8, 8, Color.White));
 
             ships = new Ship[2];
-            ships[0] = new Ship(new Vector2(180, 500), new Point(32, 32), CreateFilledRectangle(32, 32, Color.Blue), 20);
-            ships[1] = new AIShip(ships[0], new Vector2(1700, 500), new Point(32, 32), CreateFilledRectangle(32, 32, Color.Red), 17);
+            ships[0] = new Ship(new Vector2(0, 350), new Point(32, 32), CreateFilledRectangle(32, 32, Color.Blue), 60);
+            ships[1] = new AIShip(cursor, new Vector2(clientBounds.X / 2, clientBounds.Y / 2), new Point(32, 32), CreateFilledRectangle(32, 32, Color.Blue), 60);
             
         }
 
@@ -46,13 +50,14 @@ namespace AIGame
         {
             KeyMouseReader.Update();
 
+            cursor.Update();
 
             foreach(Ship ship in ships)
             {
                 ship.Update(gameTime);
             }
 
-
+            (ships[1] as AIShip).Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -65,6 +70,8 @@ namespace AIGame
             {
                 ship.Draw(spriteBatch);
             }
+
+            cursor.Draw(spriteBatch);
 
             spriteBatch.End();
             base.Draw(gameTime);
