@@ -5,17 +5,26 @@ namespace AIGame
 {
 	public class Ship : Entity
     {
-        protected Texture2D texture;
         protected Rectangle boundingBox;
-        protected Point size;
-
-        protected float health;
-        protected float maxHealth;
-        protected float speed;
+        protected Texture2D texture;
         protected Vector2 velocity;
+        protected float maxHealth;
+        protected float health;
+        protected float speed;
+        protected Point size;
+        
 
-        //protected ShipStateMachine stateMachine;
-
+        public virtual float Speed
+        {
+            get
+            {
+                return speed;
+            }
+            protected set
+            {
+                speed = value;
+            }
+        }
 
         public virtual float Health
         {
@@ -53,17 +62,6 @@ namespace AIGame
             }
         }
 
-        public virtual float Speed
-        {
-            get
-            {
-                return speed;
-            }
-            set
-            {
-                speed = value;
-            }
-        }
 
 
         public Ship(Vector2 position, Point size, Texture2D texture, float speed) : base(position)
@@ -90,7 +88,6 @@ namespace AIGame
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, boundingBox, null, Color.Orange, 0f, boundingBox.Size.ToVector2() * 0.5f, SpriteEffects.None, 0f);
             spriteBatch.Draw(texture, Position, null, Color.White, 0f, size.ToVector2() * 0.5f, 1f, SpriteEffects.None, 0f);
         }
     }
