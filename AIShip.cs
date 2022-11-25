@@ -6,7 +6,7 @@ namespace AIGame
 	public class AIShip : Ship
     {
         private FSMMachine stateMachine;
-        private Decision root;
+        private DecisionTree decisionTree;
 
         public float DistanceToTarget
         {
@@ -49,12 +49,12 @@ namespace AIGame
             get;
             private set;
         }
-        
+
 
         public AIShip(Entity target, Vector2 position, Point size, Texture2D texture, float speed) : base(position, size, texture, speed)
         {
             Target = target;
-            
+
             MinDetectionDistance = 250;
             MinEngagementDistance = 25;
             MaxEngagementDistance = 30;
@@ -63,9 +63,22 @@ namespace AIGame
             maxHealth = 200;
             MinEngagementHealth = 50;
 
-            
-
-            root = new Condition();
+            #region DT
+            DTTargetDetectableDecision targetDetectable = new DTTargetDetectableDecision(this);
+            DTReadyToEngageDecision readyToEngage = new DTReadyToEngageDecision(this);
+            DTTargetNearDecision targetNear = new DTTargetNearDecision(this);
+            DTEngageAction engage = new DTEngageAction(this);
+            DTChaseAction chase = new DTChaseAction(this);
+            DTFleeAction flee = new DTFleeAction(this);
+            DTRoamAction roam = new DTRoamAction(this);
+            targetNear.TrueBranch = engage;
+            targetNear.FalseBranch = chase;
+            readyToEngage.TrueBranch = targetNear;
+            readyToEngage.FalseBranch = flee;
+            targetDetectable.TrueBranch = readyToEngage;
+            targetDetectable.FalseBranch = roam;
+            decisionTree = new DecisionTree(targetDetectable);
+            #endregion
 
             #region FSM
             //stateMachine = new FSMMachine(ShipStateType.FSM_STATE_MACH_MAIN, this);
@@ -80,6 +93,10 @@ namespace AIGame
         public override void Update(GameTime gameTime)
         {
             DistanceToTarget = Vector2.Distance(Target.Position, Position);
+
+            #region DT
+            decisionTree.Update(gameTime);
+            #endregion
 
             #region FSM
             //stateMachine.UpdateMachine(gameTime);
