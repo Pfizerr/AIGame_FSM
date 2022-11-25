@@ -4,11 +4,11 @@ using System;
 
 namespace AIGame
 {
-	public class ChaseState : ShipState
+	public class FSMChaseState : FSMState
     {
         private Entity target;
 
-        public ChaseState(AIShip parent, Entity target) : base(ShipStateType.STATE_CHASE, parent)
+        public FSMChaseState(AIShip parent, Entity target) : base(ShipStateType.FSM_STATE_CHASE, parent)
         {
             this.target = target;
         }
@@ -26,18 +26,17 @@ namespace AIGame
 
             if (parent.DistanceToTarget > parent.MinDetectionDistance)
             {
-                return ShipStateType.STATE_ROAM; // B - A, (Chase -> Roam)
+                return ShipStateType.FSM_STATE_ROAM; // B - A, (Chase -> Roam)
             }
-            else
+
+            else if (parent.Health < parent.MinEngagementHealth)
             {
-                if (parent.Health < parent.MinEngagementHealth)
-                {
-                    return ShipStateType.STATE_FLEE; // B - C, (Chase -> Flee)
-                }
-                if (parent.DistanceToTarget < parent.MinEngagementDistance)
-                {
-                    return ShipStateType.STATE_ENGAGE; // B - D, (Chase -> Engage)
-                }
+                return ShipStateType.FSM_STATE_FLEE; // B - C, (Chase -> Flee)
+            }
+
+            else if (parent.DistanceToTarget < parent.MinEngagementDistance)
+            {
+                return ShipStateType.FSM_STATE_ENGAGE; // B - D, (Chase -> Engage)
             }
 
             return base.CheckTransitions();

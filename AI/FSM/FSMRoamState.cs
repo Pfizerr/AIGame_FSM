@@ -3,12 +3,11 @@ using System;
 
 namespace AIGame
 {
-	public class RoamState : ShipState
+	public class FSMRoamState : FSMState
     {
         private Entity target;
 
-
-        public RoamState(AIShip parent, Entity target) : base(ShipStateType.STATE_ROAM, parent)
+        public FSMRoamState(AIShip parent, Entity target) : base(ShipStateType.FSM_STATE_ROAM, parent)
         {
             this.target = target;
         }
@@ -39,11 +38,11 @@ namespace AIGame
             {
                 if (parent.Health < parent.MinEngagementHealth)
                 {
-                    return ShipStateType.STATE_FLEE; // A - C, (Roam -> Flee)
+                    return ShipStateType.FSM_STATE_FLEE; // A - C, (Roam -> Flee)
                 }
                 else
                 {
-                    return ShipStateType.STATE_CHASE; // A - B, (Roam -> Chase)
+                    return ShipStateType.FSM_STATE_CHASE; // A - B, (Roam -> Chase)
                 }
             }
 

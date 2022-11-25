@@ -1,23 +1,22 @@
-using System.Collections.Generic;
-
 namespace AIGame
 {
-    public abstract class Decision
-    {
-        public abstract void Evaluate(object context);
-    }
-
-	public class Node : Decision
+    public class Condition : Decision
     {
         public Decision Positive { get; private set; }
         public Decision Negative { get; private set; }
+
+        public Condition(Decision positive, Decision negative)
+        {
+            Positive = positive;
+            Negative = negative;
+        }
 
         public override void Evaluate(object context)
         {
             bool result = true;
             //evaluation..
 
-            if(result)
+            if (result)
             {
                 Positive.Evaluate(context);
             }
@@ -26,13 +25,6 @@ namespace AIGame
                 Negative.Evaluate(context);
             }
 
-        }
-    }
-
-    public class Leaf : Decision
-    {
-        public override void Evaluate(object context)
-        {
         }
     }
 }

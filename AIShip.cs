@@ -5,7 +5,8 @@ namespace AIGame
 {
 	public class AIShip : Ship
     {
-        private ShipStateMachine stateMachine;
+        private FSMMachine stateMachine;
+        private Decision root;
 
         public float DistanceToTarget
         {
@@ -62,19 +63,27 @@ namespace AIGame
             maxHealth = 200;
             MinEngagementHealth = 50;
 
+            
 
-            stateMachine = new ShipStateMachine(ShipStateType.STATE_MACH_MAIN, this);
-            stateMachine.AddState(new RoamState(this, target));
-            stateMachine.AddState(new FleeState(this, target));
-            stateMachine.AddState(new ChaseState(this, target));
-            stateMachine.AddState(new EngageState(this, target));
-            stateMachine.SetDefaultState(ShipStateType.STATE_ROAM);
+            root = new Condition();
+
+            #region FSM
+            //stateMachine = new FSMMachine(ShipStateType.FSM_STATE_MACH_MAIN, this);
+            //stateMachine.AddState(new FSMRoamState(this, target));
+            //stateMachine.AddState(new FSMFleeState(this, target));
+            //stateMachine.AddState(new FSMChaseState(this, target));
+            //stateMachine.AddState(new FSMEngageState(this, target));
+            //stateMachine.SetDefaultState(ShipStateType.FSM_STATE_ROAM);
+            #endregion
         }
 
         public override void Update(GameTime gameTime)
         {
             DistanceToTarget = Vector2.Distance(Target.Position, Position);
-            stateMachine.UpdateMachine(gameTime);
+
+            #region FSM
+            //stateMachine.UpdateMachine(gameTime);
+            #endregion
 
             if (KeyMouseReader.LeftClick() && boundingBox.Contains(KeyMouseReader.mouseState.Position))
             {
@@ -88,10 +97,10 @@ namespace AIGame
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            string _debug_state_text = $"CURRENT_STATE: {stateMachine.CurrentState}\nDEFAULT_STATE: {stateMachine.DefaultState}";
+            //string _debug_state_text = $"CURRENT_STATE: {stateMachine.CurrentState}\nDEFAULT_STATE: {stateMachine.DefaultState}";
             string _debug_health_text = $"HEALTH: {health}   /   MAX_HEALTH: {maxHealth}";
             string _debug_combat_text = $"DPS: {0}\nCD: {0}";
-            spriteBatch.DrawString(Game1.font, _debug_state_text, new Vector2(position.X - size.X/2, position.Y + 20), Color.Yellow);
+            //spriteBatch.DrawString(Game1.font, _debug_state_text, new Vector2(position.X - size.X/2, position.Y + 20), Color.Yellow);
             spriteBatch.DrawString(Game1.font, _debug_health_text, new Vector2(position.X - size.X/2, position.Y - 30), Color.Yellow);
             spriteBatch.DrawString(Game1.font, _debug_combat_text, new Vector2(position.X + 25, position.Y-size.Y/2), Color.Yellow);
             base.Draw(spriteBatch);

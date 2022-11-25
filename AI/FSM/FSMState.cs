@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 namespace AIGame
 {
-	public abstract class ShipState
+	public abstract class FSMState
     {
         protected AIShip parent;
 
@@ -13,7 +13,7 @@ namespace AIGame
         }
 
 
-        public ShipState(ShipStateType type, AIShip parent)
+        public FSMState(ShipStateType type, AIShip parent)
         {
             this.parent = parent;
             Type = type;

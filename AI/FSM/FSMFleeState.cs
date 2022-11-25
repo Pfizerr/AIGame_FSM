@@ -2,11 +2,11 @@ using Microsoft.Xna.Framework;
 
 namespace AIGame
 {
-	public class FleeState : ShipState
+	public class FSMFleeState : FSMState
     {
         private Entity target;
 
-        public FleeState(AIShip parent, Entity target) : base(ShipStateType.STATE_FLEE, parent)
+        public FSMFleeState(AIShip parent, Entity target) : base(ShipStateType.FSM_STATE_FLEE, parent)
         {
             this.target = target;
         }
@@ -23,12 +23,12 @@ namespace AIGame
         {
             if (target.IsActive == false || parent.DistanceToTarget > parent.MinDetectionDistance)
             {
-                return ShipStateType.STATE_ROAM;
+                return ShipStateType.FSM_STATE_ROAM;
             }
 
-            if (parent.Health > parent.MinEngagementHealth)
+            else if (parent.Health > parent.MinEngagementHealth)
             {
-                return ShipStateType.STATE_CHASE;
+                return ShipStateType.FSM_STATE_CHASE;
             }
 
 

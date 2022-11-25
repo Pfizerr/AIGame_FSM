@@ -2,11 +2,11 @@ using Microsoft.Xna.Framework;
 
 namespace AIGame
 {
-	public class EngageState : ShipState
+	public class FSMEngageState : FSMState
     {
         private Entity target;
 
-        public EngageState(AIShip parent, Entity target) : base(ShipStateType.STATE_ENGAGE, parent)
+        public FSMEngageState(AIShip parent, Entity target) : base(ShipStateType.FSM_STATE_ENGAGE, parent)
         {
             this.target = target;
         }
@@ -21,17 +21,17 @@ namespace AIGame
         {
             if (target.IsActive == false)
             {
-                return ShipStateType.STATE_ROAM; // D - A (Engage -> Roam)
+                return ShipStateType.FSM_STATE_ROAM; // D - A (Engage -> Roam)
             }
 
-            if (parent.Health < parent.MinEngagementHealth)
+            else if (parent.Health < parent.MinEngagementHealth)
             {
-                return ShipStateType.STATE_FLEE; // D - C (Engage -> Flee)
+                return ShipStateType.FSM_STATE_FLEE; // D - C (Engage -> Flee)
             }
 
-            if (parent.DistanceToTarget > parent.MaxEngagementDistance)
+            else if (parent.DistanceToTarget > parent.MaxEngagementDistance)
             {
-                return ShipStateType.STATE_CHASE; // D - B (Engage -> Chase)
+                return ShipStateType.FSM_STATE_CHASE; // D - B (Engage -> Chase)
             }
 
             return base.CheckTransitions();

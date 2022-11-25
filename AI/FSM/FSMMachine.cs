@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace AIGame
 {
-    public class ShipStateMachine : ShipState
+    public class FSMMachine : AIMachine
     {
-        private List<ShipState> states;
-        private ShipState defaultState;
-        private ShipState currentState;
+        private List<FSMState> states;
+        private FSMState defaultState;
+        private FSMState currentState;
 
-        public ShipState DefaultState
+        public FSMState DefaultState
         {
             get
             {
@@ -21,7 +21,7 @@ namespace AIGame
             }
         }
 
-        public ShipState CurrentState
+        public FSMState CurrentState
         {
             get
             {
@@ -33,12 +33,12 @@ namespace AIGame
             }
         }
 
-        public ShipStateMachine(ShipStateType type, AIShip parent) : base(type, parent)
+        public FSMMachine(ShipStateType type, AIShip parent) : base(type, parent)
         {
-            states = new List<ShipState>();
+            states = new List<FSMState>();
         }
 
-        public void UpdateMachine(GameTime gameTime)
+        public override void UpdateMachine(GameTime gameTime)
         {
             if (states.Count == 0)
                 return;
@@ -60,14 +60,14 @@ namespace AIGame
             currentState.Update(gameTime);
         }
 
-        public void AddState(ShipState state)
+        public override void AddState(FSMState state)
         {
             states.Add(state);
         }
 
-        public void SetDefaultState(ShipStateType stateType)
+        public override void SetDefaultState(ShipStateType stateType)
         {
-            foreach (ShipState behavior in states)
+            foreach (FSMState behavior in states)
             {
                 if (behavior.Type == stateType)
                 {
@@ -77,7 +77,7 @@ namespace AIGame
             }
         }
 
-        public void TransitionState(ShipStateType type)
+        public override void TransitionState(ShipStateType type)
         {
             foreach (var state in states)
             {
@@ -90,7 +90,7 @@ namespace AIGame
             }
         }
 
-        public void Reset()
+        public override void Reset()
         {
 
         }

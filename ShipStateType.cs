@@ -2,12 +2,12 @@ namespace AIGame
 {
 	public enum ShipStateType
     {
-        STATE_NONE,
-        STATE_ROAM,
-        STATE_FLEE,
-        STATE_CHASE,
-        STATE_ENGAGE,
-        STATE_MACH_NONE,
-        STATE_MACH_MAIN
+        FSM_STATE_NONE,
+        FSM_STATE_ROAM,
+        FSM_STATE_FLEE,
+        FSM_STATE_CHASE,
+        FSM_STATE_ENGAGE,
+        FSM_STATE_MACH_NONE,
+        FSM_STATE_MACH_MAIN
     }
 }
