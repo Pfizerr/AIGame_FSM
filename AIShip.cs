@@ -5,50 +5,17 @@ namespace AIGame
 {
 	public class AIShip : Ship
     {
-        private FSMMachine stateMachine;
+        //private FSMMachine stateMachine;
         private DecisionTree decisionTree;
 
-        public float DistanceToTarget
-        {
-            get;
-            private set;
-        }
+        public float MaxEngagementDistance { get; private set; }
+        public float MinEngagementDistance { get; private set; }
+        public float MinDetectionDistance { get; private set; }
+        public float MinEngagementHealth { get; private set; }
+        public float DistanceToTarget { get; private set; }
+        public float AngleToTarget { get; private set; }
+        public Entity Target { get; private set; }
 
-        public float MinDetectionDistance
-        {
-            get;
-            private set;
-        }
-
-        public float MinEngagementDistance
-        {
-            get;
-            private set;
-        }
-
-        public float MaxEngagementDistance
-        {
-            get;
-            private set;
-        }
-
-        public float MinEngagementHealth
-        {
-            get;
-            private set;
-        }
-
-        public Entity Target
-        {
-            get;
-            private set;
-        }
-
-        public float AngleToTarget
-        {
-            get;
-            private set;
-        }
 
 
         public AIShip(Entity target, Vector2 position, Point size, Texture2D texture, float speed) : base(position, size, texture, speed)
