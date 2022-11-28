@@ -14,14 +14,14 @@ namespace AIGame
         public override void Update(GameTime gameTime)
         {
             Vector2 distNormal = Vector2.Normalize(target.Position - parent.Position);
-            parent.Velocity = distNormal * parent.Speed * -1;
+            parent.Velocity = distNormal * parent.MaxSpeed * -1;
 
             base.Update(gameTime);
         }
 
         public override ShipStateType CheckTransitions()
         {
-            if (target.IsActive == false || parent.DistanceToTarget > parent.MinDetectionDistance)
+            if (target.IsAlive == false || parent.DistanceToTarget > parent.MinDetectionDistance)
             {
                 return ShipStateType.FSM_STATE_ROAM;
             }

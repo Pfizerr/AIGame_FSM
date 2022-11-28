@@ -14,7 +14,7 @@ namespace AIGame
         public override void DoBehaviour(GameTime gameTime)
         {
             Vector2 dpos = Vector2.Normalize(parent.Target.Position - parent.Position);
-            parent.Velocity = dpos * parent.Speed;
+            parent.Velocity = dpos * parent.MaxSpeed;
         }
     }
 }

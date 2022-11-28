@@ -2,28 +2,27 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using System.Diagnostics;
+
 namespace AIGame
 {
     public class Cursor : Entity
     {
-        private Texture2D texture;
-        private Point size;
-
         public bool IsTargetable
         {
             get;
             private set;
         }
 
-        public Cursor( Point size, Texture2D texture) : base(Vector2.Zero)
+        public Cursor(Point size, Texture2D texture) : base(Vector2.Zero, size, 0.0f, texture)
         {
-            this.texture = texture;
-            this.size = size;
         }
 
-        public void Update()
+        public override void Update(GameTime gameTime)
         {
             Position = KeyMouseReader.mouseState.Position.ToVector2();
+
+            Debug.WriteLine(Position);
 
             if(KeyMouseReader.KeyHold(Keys.Space))
             {
@@ -35,9 +34,9 @@ namespace AIGame
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, Position, null, Color.White, 0f, size.ToVector2() * 0.5f, 1f, SpriteEffects.None, 0f);
+            base.Draw(spriteBatch);
         }
     }
 }

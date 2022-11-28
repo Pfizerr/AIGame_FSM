@@ -3,24 +3,36 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AIGame
 {
-	public class Boid : Entity
+    public interface ISteerable
     {
-        private float speed;
-        private Vector2 direction;
+        void SteeringThrustAccumulate(Vector2 totalSteeringForce);
+    }
 
-        public Boid(Vector2 position, Vector2 direction, float speed) : base(position)
+	public class Boid : Entity, ISteerable
+    {
+        private SteeringControl control;
+
+        public Boid(Vector2 position, Point size, /*Vector2 direction,*/ float maxSpeed, Texture2D texture) : base(position, size, maxSpeed, texture)
         {
-            this.speed = speed;
+            control = new SteeringControl(this);   
         }
 
         public override void Update(GameTime gameTime)
         {
-
+            control.Update(gameTime);
+            base.Update(gameTime);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            control.Draw(spriteBatch);
+            base.Draw(spriteBatch);
+        }
+
+        public void SteeringThrustAccumulate(Vector2 totalSteeringForce)
         {
 
         }
+
     }
 }

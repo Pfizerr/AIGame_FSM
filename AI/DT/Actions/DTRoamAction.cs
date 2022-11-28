@@ -15,7 +15,7 @@ namespace AIGame
         {
             float dt = (float)(gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0f);
 
-            if (parent.Velocity.Length() < parent.Speed * 0.1f)
+            if (parent.Velocity.Length() < parent.MaxSpeed * 0.1f)
             {
                 parent.Velocity = Vector2.Zero;
             }

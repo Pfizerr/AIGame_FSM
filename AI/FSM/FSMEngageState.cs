@@ -19,7 +19,7 @@ namespace AIGame
 
         public override ShipStateType CheckTransitions()
         {
-            if (target.IsActive == false)
+            if (target.IsAlive == false)
             {
                 return ShipStateType.FSM_STATE_ROAM; // D - A (Engage -> Roam)
             }

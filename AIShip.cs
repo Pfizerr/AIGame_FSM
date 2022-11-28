@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using System.Diagnostics;
+
 namespace AIGame
 {
 	public class AIShip : Ship
@@ -60,6 +62,8 @@ namespace AIGame
         public override void Update(GameTime gameTime)
         {
             DistanceToTarget = Vector2.Distance(Target.Position, Position);
+            Debug.WriteLine(Target.Position);
+
 
             #region DT
             decisionTree.Update(gameTime);
@@ -74,7 +78,7 @@ namespace AIGame
                 health -= 10;
             }
 
-            isActive = (health > 0);
+            isAlive = (health > 0);
 
             base.Update(gameTime);
         }

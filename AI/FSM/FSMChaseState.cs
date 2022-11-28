@@ -16,7 +16,7 @@ namespace AIGame
         public override void Update(GameTime gameTime)
         {
             Vector2 dpos = Vector2.Normalize(target.Position - parent.Position);
-            parent.Velocity = dpos * parent.Speed;
+            parent.Velocity = dpos * parent.MaxSpeed;
 
             base.Update(gameTime);
         }

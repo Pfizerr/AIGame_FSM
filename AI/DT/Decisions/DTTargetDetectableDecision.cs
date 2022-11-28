@@ -11,7 +11,7 @@ namespace AIGame
 
         public override DecisionTreeNode GetBranch()
         {
-            if (parent.Target.IsActive)
+            if (parent.Target.IsAlive)
             {
                 if (parent.DistanceToTarget < parent.MinDetectionDistance)
                 {

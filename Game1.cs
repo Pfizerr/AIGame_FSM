@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AIGame
@@ -7,11 +9,15 @@ namespace AIGame
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-
-        private Ship[] ships;
         private Point clientBounds;
-        private Cursor cursor;
+
         public static SpriteFont font;
+        public static Random random = new Random();
+
+        private List<AIShip> aiShips;
+        private List<Boid> boids;
+        private Cursor cursor;
+
 
         public Game1()
         {
@@ -38,26 +44,51 @@ namespace AIGame
             graphics.PreferredBackBufferHeight = clientBounds.Y;
             graphics.ApplyChanges();
 
-            cursor = new Cursor(new Point(8, 8), CreateFilledRectangle(8, 8, Color.White));
+            aiShips = new List<AIShip>();
+            boids = new List<Boid>();
 
-            ships = new Ship[2];
-            ships[0] = new Ship(new Vector2(0, 350), new Point(32, 32), CreateFilledRectangle(32, 32, Color.Blue), 60);
-            ships[1] = new AIShip(cursor, new Vector2(clientBounds.X / 2, clientBounds.Y / 2), new Point(32, 32), CreateFilledRectangle(32, 32, Color.Blue), 60);
+            cursor = new Cursor(new Point(4, 4), CreateFilledRectangle(4, 4, Color.White));
+            aiShips.Add(new AIShip(cursor, new Vector2(clientBounds.X / 2, clientBounds.Y / 2), new Point(32, 32), CreateFilledRectangle(32, 32, Color.Blue), 60));
+
+
+            for (int i = 0; i < 20; i++)
+            {
+                Vector2 randPos = new Vector2(random.Next(0, clientBounds.X), random.Next(0, clientBounds.Y));
+                boids.Add(new Boid(randPos, new Point(2, 2), 50.0f, CreateFilledRectangle(2, 2, Color.White)));
+            }
             
         }
 
         protected override void Update(GameTime gameTime)
         {
             KeyMouseReader.Update();
-
-            cursor.Update();
-
-            foreach(Ship ship in ships)
+            
+            for (int i = 0; i < aiShips.Count; i++)
             {
-                ship.Update(gameTime);
+                if (aiShips[i].IsAlive)
+                {
+                    aiShips[i].Update(gameTime);
+                }
+                else
+                {
+                    // handle dead aiship.
+                }
             }
 
-            (ships[1] as AIShip).Update(gameTime);
+            for (int i = 0; i < boids.Count; i++)
+            {
+                if (boids[i].IsAlive)
+                {
+                    boids[i].Update(gameTime);
+                }
+                else
+                {
+                    // handle dead boid.
+                }
+            }
+
+            cursor.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -66,10 +97,11 @@ namespace AIGame
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
 
-            foreach(Ship ship in ships)
-            {
-                ship.Draw(spriteBatch);
-            }
+            foreach (Boid boid in boids)
+                boid.Draw(spriteBatch);
+            
+            foreach (AIShip aiShip in aiShips)
+                aiShip.Draw(spriteBatch);
 
             cursor.Draw(spriteBatch);
 
