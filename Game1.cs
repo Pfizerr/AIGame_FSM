@@ -124,4 +124,9 @@ namespace AIGame
             return rectTexture;
         }
     }
+
+    public static Entity GetNearestEntity(Vector2 location)
+    {
+
+    }
 }
