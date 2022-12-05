@@ -9,11 +9,27 @@ namespace AIGame
     {
         private int[,] map;
 
-        //private Vector2 position;
+        private Point cellSize;
+        private Point location;
+        
 
-        public InfluenceMap(int width, int height)
+        public InfluenceMap(int resolution, Point location, Point cellSize)
         {
+            map = new int[resolution, resolution];
+            this.cellSize = cellSize;
+        }
 
+        public void ModifyCell(int x, int y, int diff)
+        {
+            map[x, y] = diff;
+        }
+
+        public bool ContainsPoint(int ix, int iy)
+        {
+            Point cellWorldLocation = new Point(location.X + (cellSize.X * ix), location.Y + (cellSize.X * ix));
+            return (cellWorldLocation.X >= ix && cellWorldLocation.X + cellSize.X <= ix)
+                && (cellWorldLocation.Y >= iy && cellWorldLocation.X + cellSize.Y <= iy);
+            
         }
     }
 }
