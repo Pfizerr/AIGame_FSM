@@ -22,8 +22,6 @@ namespace AIGame
         {
             Position = KeyMouseReader.mouseState.Position.ToVector2();
 
-            Debug.WriteLine(Position);
-
             if(KeyMouseReader.KeyHold(Keys.Space))
             {
                 IsTargetable = true;

@@ -9,15 +9,12 @@ namespace AIGame
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        private Point clientBounds;
-
-        public static SpriteFont font;
-        public static Random random = new Random();
-
         private List<AIShip> aiShips;
-        private List<Boid> boids;
+        private Point clientBounds;
         private Cursor cursor;
 
+        public static Random random = new Random();
+        public static SpriteFont font;
 
         public Game1()
         {
@@ -45,18 +42,8 @@ namespace AIGame
             graphics.ApplyChanges();
 
             aiShips = new List<AIShip>();
-            boids = new List<Boid>();
-
             cursor = new Cursor(new Point(4, 4), CreateFilledRectangle(4, 4, Color.White));
             aiShips.Add(new AIShip(cursor, new Vector2(clientBounds.X / 2, clientBounds.Y / 2), new Point(32, 32), CreateFilledRectangle(32, 32, Color.Blue), 60));
-
-
-            for (int i = 0; i < 20; i++)
-            {
-                Vector2 randPos = new Vector2(random.Next(0, clientBounds.X), random.Next(0, clientBounds.Y));
-                boids.Add(new Boid(randPos, new Point(2, 2), 50.0f, CreateFilledRectangle(2, 2, Color.White)));
-            }
-            
         }
 
         protected override void Update(GameTime gameTime)
@@ -72,18 +59,7 @@ namespace AIGame
                 else
                 {
                     // handle dead aiship.
-                }
-            }
-
-            for (int i = 0; i < boids.Count; i++)
-            {
-                if (boids[i].IsAlive)
-                {
-                    boids[i].Update(gameTime);
-                }
-                else
-                {
-                    // handle dead boid.
+                    aiShips.RemoveAt(i);
                 }
             }
 
@@ -96,11 +72,6 @@ namespace AIGame
         {
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-
-            foreach (Boid boid in boids)
-            {
-                boid.Draw(spriteBatch);
-            }
             
             foreach (AIShip aiShip in aiShips)
             {

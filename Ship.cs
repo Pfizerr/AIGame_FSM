@@ -9,8 +9,6 @@ namespace AIGame
         protected float maxHealth;
         protected float speed;
 
-        //protected ShipStateMachine stateMachine;
-
         public virtual float Health
         {
             get

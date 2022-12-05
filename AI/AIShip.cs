@@ -104,6 +104,8 @@ namespace AIGame
             string dtDebugText = $"DT: {DEBUG_DT}\nLast Behaviour: {LastAction.GetType().Name}";
             spriteBatch.DrawString(Game1.font, dtDebugText, new Vector2(300, 20), Color.Red);
 
+            spriteBatch.DrawString(Game1.font, "Press space to switch between DT/FSM.", new Vector2(100, 80), Color.White);
+
 
             base.Draw(spriteBatch);
         }
