@@ -7,7 +7,12 @@ namespace AIGame
 {
 	public class AIShip : Ship
     {
-        //private FSMMachine stateMachine;
+        private bool DEBUG_DT = false;
+        private bool DEBUG_FSM = true;
+
+        public DecisionTreeAction LastAction { get; set; }
+
+        private FSMMachine stateMachine;
         private DecisionTree decisionTree;
 
         public float MaxEngagementDistance { get; private set; }
@@ -27,12 +32,10 @@ namespace AIGame
             MinDetectionDistance = 250;
             MinEngagementDistance = 25;
             MaxEngagementDistance = 30;
-
             health = 100;
             maxHealth = 200;
             MinEngagementHealth = 50;
 
-            #region DT
             DTTargetDetectableDecision targetDetectable = new DTTargetDetectableDecision(this);
             DTReadyToEngageDecision readyToEngage = new DTReadyToEngageDecision(this);
             DTTargetNearDecision targetNear = new DTTargetNearDecision(this);
@@ -47,31 +50,38 @@ namespace AIGame
             targetDetectable.TrueBranch = readyToEngage;
             targetDetectable.FalseBranch = roam;
             decisionTree = new DecisionTree(targetDetectable);
-            #endregion
+            LastAction = roam;
 
-            #region FSM
-            //stateMachine = new FSMMachine(ShipStateType.FSM_STATE_MACH_MAIN, this);
-            //stateMachine.AddState(new FSMRoamState(this, target));
-            //stateMachine.AddState(new FSMFleeState(this, target));
-            //stateMachine.AddState(new FSMChaseState(this, target));
-            //stateMachine.AddState(new FSMEngageState(this, target));
-            //stateMachine.SetDefaultState(ShipStateType.FSM_STATE_ROAM);
-            #endregion
+            stateMachine = new FSMMachine(ShipStateType.FSM_STATE_MACH_MAIN, this);
+            stateMachine.AddState(new FSMRoamState(this, target));
+            stateMachine.AddState(new FSMFleeState(this, target));
+            stateMachine.AddState(new FSMChaseState(this, target));
+            stateMachine.AddState(new FSMEngageState(this, target));
+            stateMachine.SetDefaultState(ShipStateType.FSM_STATE_ROAM);
         }
 
         public override void Update(GameTime gameTime)
         {
             DistanceToTarget = Vector2.Distance(Target.Position, Position);
-            Debug.WriteLine(Target.Position);
 
-
-            #region DT
-            decisionTree.Update(gameTime);
-            #endregion
-
-            #region FSM
-            //stateMachine.UpdateMachine(gameTime);
-            #endregion
+            if (DEBUG_DT)
+            {
+                if (KeyMouseReader.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
+                {
+                    DEBUG_DT = false;
+                    DEBUG_FSM = true;
+                }
+                decisionTree.Update(gameTime);
+            }
+            else if (DEBUG_FSM)
+            {
+                if (KeyMouseReader.KeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
+                {
+                    DEBUG_FSM = false;
+                    DEBUG_DT = true;
+                }
+                stateMachine.UpdateMachine(gameTime);
+            }
 
             if (KeyMouseReader.LeftClick() && boundingBox.Contains(KeyMouseReader.mouseState.Position))
             {
@@ -85,12 +95,16 @@ namespace AIGame
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //string _debug_state_text = $"CURRENT_STATE: {stateMachine.CurrentState}\nDEFAULT_STATE: {stateMachine.DefaultState}";
-            string _debug_health_text = $"HEALTH: {health}   /   MAX_HEALTH: {maxHealth}";
-            string _debug_combat_text = $"DPS: {0}\nCD: {0}";
-            //spriteBatch.DrawString(Game1.font, _debug_state_text, new Vector2(position.X - size.X/2, position.Y + 20), Color.Yellow);
-            spriteBatch.DrawString(Game1.font, _debug_health_text, new Vector2(position.X - size.X/2, position.Y - 30), Color.Yellow);
-            spriteBatch.DrawString(Game1.font, _debug_combat_text, new Vector2(position.X + 25, position.Y-size.Y/2), Color.Yellow);
+            string healthText = $"HEALTH: {health}   /   MAX_HEALTH: {maxHealth}";
+            spriteBatch.DrawString(Game1.font, healthText, new Vector2(position.X - size.X / 2, position.Y - 30), Color.Yellow);
+
+            string fsmDebugText = $"FSM: {DEBUG_FSM}\nState: {stateMachine.CurrentState}\nDefault: {stateMachine.DefaultState}";
+            spriteBatch.DrawString(Game1.font, fsmDebugText, new Vector2(100, 20), Color.Blue);
+        
+            string dtDebugText = $"DT: {DEBUG_DT}\nLast Behaviour: {LastAction.GetType().Name}";
+            spriteBatch.DrawString(Game1.font, dtDebugText, new Vector2(300, 20), Color.Red);
+
+
             base.Draw(spriteBatch);
         }
     }

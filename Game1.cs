@@ -98,10 +98,14 @@ namespace AIGame
             spriteBatch.Begin();
 
             foreach (Boid boid in boids)
+            {
                 boid.Draw(spriteBatch);
+            }
             
             foreach (AIShip aiShip in aiShips)
+            {
                 aiShip.Draw(spriteBatch);
+            }
 
             cursor.Draw(spriteBatch);
 
@@ -123,10 +127,11 @@ namespace AIGame
             rectTexture.SetData(data);
             return rectTexture;
         }
-    }
 
-    public static Entity GetNearestEntity(Vector2 location)
-    {
-
+        public static Entity GetNearestEntity(Vector2 location)
+        {
+            return null;
+        }
+            
     }
 }

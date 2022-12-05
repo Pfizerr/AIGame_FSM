@@ -51,11 +51,5 @@ namespace AIGame
         {
             base.Draw(spriteBatch);
         }
-
-        //public override void Draw(SpriteBatch spriteBatch)
-        //{
-        //    spriteBatch.Draw(texture, boundingBox, null, Color.Orange, 0f, boundingBox.Size.ToVector2() * 0.5f, SpriteEffects.None, 0f);
-        //    spriteBatch.Draw(texture, Position, null, Color.White, 0f, size.ToVector2() * 0.5f, 1f, SpriteEffects.None, 0f);
-        //}
     }
 }

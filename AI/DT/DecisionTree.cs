@@ -10,7 +10,7 @@ namespace AIGame
 
         public DecisionTree(DecisionTreeNode tree)
         {
-            this.root = tree;
+            root = tree;
         }
 
         public void Update(GameTime gameTime) => (root.MakeDecision() as DecisionTreeAction).DoBehaviour(gameTime);

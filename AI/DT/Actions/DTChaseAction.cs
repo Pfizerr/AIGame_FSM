@@ -15,6 +15,8 @@ namespace AIGame
         {
             Vector2 dpos = Vector2.Normalize(parent.Target.Position - parent.Position);
             parent.Velocity = dpos * parent.MaxSpeed;
+
+            parent.LastAction = this;
         }
     }
 }

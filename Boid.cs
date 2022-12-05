@@ -14,18 +14,18 @@ namespace AIGame
 
         public Boid(Vector2 position, Point size, /*Vector2 direction,*/ float maxSpeed, Texture2D texture) : base(position, size, maxSpeed, texture)
         {
-            control = new SteeringControl(this);   
+            //control = new SteeringControl(this);   
         }
 
         public override void Update(GameTime gameTime)
         {
-            control.Update(gameTime);
+            //control.Update(gameTime);
             base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            control.Draw(spriteBatch);
+            //control.Draw(spriteBatch);
             base.Draw(spriteBatch);
         }
 

@@ -23,6 +23,8 @@ namespace AIGame
             {
                 parent.Velocity -= parent.Velocity * 0.5f * dt;
             }
+
+            parent.LastAction = this;
         }
     }
 }
